@@ -5,7 +5,7 @@
 using namespace std;
 
 enum RoomType {
-    LIVING = 1,
+    CHILDRENS = 1,
     KITCHEN = 2,
     BATHROOM = 3,
     BEDROOM = 4,
@@ -129,7 +129,7 @@ int main() {
                         cout << "Fill " << l << " room on the " << k << " floor." << endl;
 
                         cout << "Enter the type of room: ";
-                        cout << LIVING << "-Living, " << KITCHEN << "-Kitchen, " << BATHROOM << "-Bathroom, "
+                        cout << CHILDRENS << "-Children's room, " << KITCHEN << "-Kitchen, " << BATHROOM << "-Bathroom, "
                             << BEDROOM << "-Bedroom, " << GUESTROOM << "-Guestroom" << endl;
                         int type_room = 0;
                         cin >> type_room;
