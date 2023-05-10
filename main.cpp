@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <string>
 
 using namespace std;
 
@@ -19,39 +18,38 @@ enum BuildType {
     BARN = 4
 };
 
-struct SPlot {
+struct SRoom {
 
-    struct SBuilding {
+    RoomType type;
+    double area = 0;
+} room;
 
-        struct SBath {
-            double area = 0;
-            bool chimney = false;
-        } bath;
+struct SFloor {
+    vector<SRoom> rooms;
+    double ceiling_height = 0;
+} floor_house;
 
-        struct SHouse {
-            struct SFloor {
-                struct SRoom {
-
-                    RoomType type;
-                    double area = 0;
-                } room;
-
-                vector<SRoom> rooms;
-                double ceiling_height = 0;
-            } floor;
-
-            vector<SFloor> floors;
-            double area = 0;
-            bool chimney = false;
-        } house;
-
+struct SBuilding {
+    struct SHouse {
+        vector<SFloor> floors;
         double area = 0;
-        BuildType type;
-    } building;
+        bool chimney = false;
+    } house;
 
+    struct SBath {
+        double area = 0;
+        bool chimney = false;
+    } bath;
+
+    double area = 0;
+    BuildType type;
+} building;
+
+struct SPlot {
     vector<SBuilding> buildings;
     double area = 0;
 } plot;
+
 
 int main() {
     vector<SPlot> plots;
@@ -60,7 +58,7 @@ int main() {
     cin >> count_plot;
 
     for (int i = 1; i <= count_plot; ++i) {
-    cout << endl;
+        cout << endl;
         cout << "Fill " << i << " plot." << endl;
         cout << "Enter the area of plot:";
         cin >> plot.area;
@@ -70,44 +68,45 @@ int main() {
         cin >> count_buildings;
 
         for (int j = 1; j <= count_buildings; ++j) {
-        cout << endl;
+            cout << endl;
             cout << "Fill " << j << " build." << endl;
             cout << "Enter the type of build: ";
             cout << HOUSE << "-House, " << BATH << "-Bathhouse, " << GARAGE << "-Garage, " << BARN << "-Barn" << endl;
             int type = 0;
             cin >> type;
-            plot.building.type = static_cast<BuildType>(type);
+            building.type = static_cast<BuildType>(type);
 
-            if (plot.building.type == GARAGE || plot.building.type == BARN) {
+
+            if (building.type == GARAGE || building.type == BARN) {
                 cout << endl;
                 cout << "Enter the area of build: ";
-                cin >> plot.building.area;
-            } else if (plot.building.type == BATH) {
+                cin >> building.area;
+            } else if (building.type == BATH) {
                 cout << endl;
                 cout << "Enter the area of bathhouse: ";
-                cin >> plot.building.bath.area;
+                cin >> building.bath.area;
                 cout << endl;
                 cout << "Is there a chimney oven in the building? (y/n)" << endl;
                 char chimney;
                 cin >> chimney;
                 if (chimney == 'y') {
-                    plot.building.bath.chimney = true;
+                    building.bath.chimney = true;
                 } else if (chimney == 'n') {
-                    plot.building.bath.chimney = false;
+                    building.bath.chimney = false;
                 }
-            } else if (plot.building.type == HOUSE) {
+            } else if (building.type == HOUSE) {
                 cout << endl;
                 cout << "Enter the area of house: ";
-                cin >> plot.building.house.area;
+                cin >> building.house.area;
                 cout << endl;
 
                 cout << "Is there a chimney oven in the house? (y/n)" << endl;
                 char chimney;
                 cin >> chimney;
                 if (chimney == 'y') {
-                    plot.building.house.chimney = true;
+                    building.house.chimney = true;
                 } else if (chimney == 'n') {
-                    plot.building.house.chimney = false;
+                    building.house.chimney = false;
                 }
 
                 cout << "How many floors in the house?";
@@ -118,7 +117,7 @@ int main() {
                     cout << endl;
                     cout << "Fill " << k << " floor." << endl;
                     cout << "What is the height of the ceilings on the " << k << " floor:";
-                    cin >> plot.building.house.floor.ceiling_height;
+                    cin >> floor_house.ceiling_height;
 
                     cout << endl << "Enter number of rooms per floor:";
                     int rooms_floor = 0;
@@ -129,20 +128,21 @@ int main() {
                         cout << "Fill " << l << " room on the " << k << " floor." << endl;
 
                         cout << "Enter the type of room: ";
-                        cout << CHILDRENS << "-Children's room, " << KITCHEN << "-Kitchen, " << BATHROOM << "-Bathroom, "
-                            << BEDROOM << "-Bedroom, " << GUESTROOM << "-Guestroom" << endl;
+                        cout << CHILDRENS << "-Children's room, " << KITCHEN << "-Kitchen, " << BATHROOM
+                             << "-Bathroom, "
+                             << BEDROOM << "-Bedroom, " << GUESTROOM << "-Guestroom" << endl;
                         int type_room = 0;
                         cin >> type_room;
-                        plot.building.house.floor.room.type = static_cast<RoomType>(type_room);
+                        room.type = static_cast<RoomType>(type_room);
 
                         cout << "Enter the area of room:";
-                        cin >> plot.building.house.floor.room.area;
+                        cin >> room.area;
 
-                        plot.building.house.floor.rooms.push_back(plot.building.house.floor.room);
+                        floor_house.rooms.push_back(room);
                     }
-                    plot.building.house.floors.push_back(plot.building.house.floor);
+                    building.house.floors.push_back(floor_house);
                 }
-                plot.buildings.push_back(plot.building);
+                plot.buildings.push_back(building);
             }
         }
         plots.push_back(plot);
